@@ -7,3 +7,7 @@ trained_models
 build/*
 dist/*
 .idea/
+
+# Jupyter checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
