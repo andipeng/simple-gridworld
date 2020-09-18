@@ -39,8 +39,6 @@ class SimpleGrid(MiniGridEnv):
             self.agent_dir = self.agent_start_dir
         else:
             self.place_agent()
-            #Andi added
-            self.place_agent()
 
         #TODO CHANGE
         self.mission = "get to the green goal square"
