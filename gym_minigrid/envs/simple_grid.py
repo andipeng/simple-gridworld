@@ -29,15 +29,17 @@ class SimpleGrid(MiniGridEnv):
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
 
-        #TODO CHANGE
         # Place a goal square in the bottom-right corner
-        self.put_obj(Goal(), width - 2, height - 2)
+        #self.put_obj(Goal(), width - 2, height - 2)
+        self.put_obj(Lava(), width-3, height-3)
 
         # Place the agent
         if self.agent_start_pos is not None:
             self.agent_pos = self.agent_start_pos
             self.agent_dir = self.agent_start_dir
         else:
+            self.place_agent()
+            #Andi added
             self.place_agent()
 
         #TODO CHANGE
