@@ -1,5 +1,6 @@
 from gym_minigrid.minigrid import *
 from gym_minigrid.register import register
+import random
 
 class SimpleGrid(MiniGridEnv):
     """
@@ -31,7 +32,11 @@ class SimpleGrid(MiniGridEnv):
 
         # Place a goal square in the bottom-right corner
         #self.put_obj(Goal(), width - 2, height - 2)
-        self.put_obj(Lava(), width-3, height-3)
+        for obj in range(0, random.randint(0, 5)):
+            self.place_obj(Key())
+        
+        for obj in range(0, random.randint(0, 5)):
+            self.place_obj(Box(color='green'))
 
         # Place the agent
         if self.agent_start_pos is not None:
@@ -41,7 +46,21 @@ class SimpleGrid(MiniGridEnv):
             self.place_agent()
 
         #TODO CHANGE
-        self.mission = "get to the green goal square"
+        self.mission = 'you must fetch a box'
+
+    def step(self, action):
+        obs, reward, done, info = MiniGridEnv.step(self, action)
+
+        if self.carrying:
+            if self.carrying.color == self.targetColor and \
+               self.carrying.type == self.targetType:
+                reward = self._reward()
+                done = True
+            else:
+                reward = 0
+                done = True
+
+        return obs, reward, done, info
         
 class SimpleGrid5x5(SimpleGrid):
     def __init__(self, **kwargs):
