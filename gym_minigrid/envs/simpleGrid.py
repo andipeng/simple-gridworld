@@ -4,7 +4,7 @@ import random
 
 class SimpleGrid(MiniGridEnv):
     """
-    (Andi) Simple 5x5, 7x7 grid environment, no obstacles
+    Simple 5x5, 7x7 grid environment, no obstacles
     """
     
     def __init__(
@@ -14,7 +14,7 @@ class SimpleGrid(MiniGridEnv):
         agent_start_dir=0,
     ):
         self.agent_start_pos = agent_start_pos
-        self.agent_start_dir = agent_start_dir
+        self.agent_start_dir = agent_start_dir 
 
         super().__init__(
             grid_size=size,
