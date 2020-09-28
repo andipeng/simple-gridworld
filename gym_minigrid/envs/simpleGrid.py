@@ -1,6 +1,5 @@
 from gym_minigrid.minigrid import *
 from gym_minigrid.register import register
-import random
 
 class SimpleGrid(MiniGridEnv):
     """
@@ -12,13 +11,16 @@ class SimpleGrid(MiniGridEnv):
         size=8,
         agent_start_pos=(1,1),
         agent_start_dir=0,
+        numObjs = 0,
+        
     ):
         self.agent_start_pos = agent_start_pos
-        self.agent_start_dir = agent_start_dir 
+        self.agent_start_dir = agent_start_dir
+        self.numObjs = numObjs
 
         super().__init__(
             grid_size=size,
-            max_steps=4*size*size,
+            max_steps=20*size*size,
             # Set this to True for maximum speed
             see_through_walls=True
         )
@@ -29,38 +31,37 @@ class SimpleGrid(MiniGridEnv):
 
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
-
-        # Place a goal square in the bottom-right corner
-        #self.put_obj(Goal(), width - 2, height - 2)
-        for obj in range(0, random.randint(0, 5)):
-            self.place_obj(Key())
         
-        for obj in range(0, random.randint(0, 5)):
-            self.place_obj(Box(color='green'))
+        # Generated keys
+        self.numObjs = self._rand_int(1, 5)
+        objs = []
+        objPos = []
+        
+        # Until we have generated all the keys and placed randomly
+        while len(objs) < self.numObjs:
+            objColor = 'green'
+            pos = self.place_obj(Key(objColor))
+            objs.append(('key', objColor))
+            objPos.append(pos)
 
-        # Place the agent
-        if self.agent_start_pos is not None:
-            self.agent_pos = self.agent_start_pos
-            self.agent_dir = self.agent_start_dir
-        else:
-            self.place_agent()
+        # Randomize the agent start position and orientation
+        self.place_agent()
+        self.reward_range = (0, len(objs))
 
         #TODO CHANGE
-        self.mission = 'you must fetch a box'
+        self.mission = 'you must fetch the green keys'
 
     def step(self, action):
         obs, reward, done, info = MiniGridEnv.step(self, action)
 
-        if self.carrying:
-            if self.carrying.color == self.targetColor and \
-               self.carrying.type == self.targetType:
-                reward = self._reward()
-                done = True
-            else:
-                reward = 0
-                done = True
+        # loops until done collecting all objects
+        if reward == self.numObjs:
+            done = True
 
         return obs, reward, done, info
+    
+    def _reward(self):
+        return len(self.collected)
         
 class SimpleGrid5x5(SimpleGrid):
     def __init__(self, **kwargs):

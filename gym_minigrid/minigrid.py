@@ -95,6 +95,10 @@ class WorldObj:
     def can_pickup(self):
         """Can the agent pick this up?"""
         return False
+    
+    def can_collect(self):
+        """Can the agent collect this item?"""
+        return False
 
     def can_contain(self):
         """Can this contain another object?"""
@@ -278,6 +282,9 @@ class Key(WorldObj):
 
     def can_pickup(self):
         return True
+    
+    def can_collect(self):
+        return True
 
     def render(self, img):
         c = COLORS[self.color]
@@ -299,6 +306,9 @@ class Ball(WorldObj):
 
     def can_pickup(self):
         return True
+    
+    def can_collect(self):
+        return True
 
     def render(self, img):
         fill_coords(img, point_in_circle(0.5, 0.5, 0.31), COLORS[self.color])
@@ -309,6 +319,9 @@ class Box(WorldObj):
         self.contains = contains
 
     def can_pickup(self):
+        return True
+    
+    def can_collect(self):
         return True
 
     def render(self, img):
@@ -634,6 +647,8 @@ class MiniGridEnv(gym.Env):
 
         # Pick up an object
         pickup = 3
+        # Collect an object
+        collect = 7
         # Drop an object
         drop = 4
         # Toggle/activate an object
@@ -723,6 +738,9 @@ class MiniGridEnv(gym.Env):
 
         # Item picked up, being carried, initially nothing
         self.carrying = None
+        
+        # Collected objects, initially empty list
+        self.collected = []
 
         # Step count since episode start
         self.step_count = 0
@@ -1099,7 +1117,7 @@ class MiniGridEnv(gym.Env):
     def step(self, action):
         self.step_count += 1
 
-        reward = 0
+        reward = len(self.collected)
         done = False
 
         # Get the position in front of the agent
@@ -1135,6 +1153,14 @@ class MiniGridEnv(gym.Env):
                     self.carrying = fwd_cell
                     self.carrying.cur_pos = np.array([-1, -1])
                     self.grid.set(*fwd_pos, None)
+                    
+        # Collect an object
+        elif action == self.actions.collect:
+            if fwd_cell and fwd_cell.can_collect():
+                obj_to_collect = fwd_cell
+                obj_to_collect.cur_pos = np.array([-1, -1])
+                self.collected.append(obj_to_collect)
+                self.grid.set(*fwd_pos, None)
 
         # Drop an object
         elif action == self.actions.drop:
