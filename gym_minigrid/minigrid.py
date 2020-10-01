@@ -1116,8 +1116,8 @@ class MiniGridEnv(gym.Env):
 
     def step(self, action):
         self.step_count += 1
-
-        reward = len(self.collected)
+        
+        reward = 0
         done = False
 
         # Get the position in front of the agent

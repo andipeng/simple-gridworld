@@ -11,6 +11,7 @@ class SimpleGrid(MiniGridEnv):
         size=8,
         agent_start_pos=(1,1),
         agent_start_dir=0,
+        # Number of keys generated in env
         numObjs = 0,
         
     ):
@@ -54,6 +55,7 @@ class SimpleGrid(MiniGridEnv):
     def step(self, action):
         obs, reward, done, info = MiniGridEnv.step(self, action)
 
+        reward = len(self.collected)
         # loops until done collecting all objects
         if reward == self.numObjs:
             done = True
