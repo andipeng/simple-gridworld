@@ -834,6 +834,13 @@ class MiniGridEnv(gym.Env):
     def _gen_grid(self, width, height):
         assert False, "_gen_grid needs to be implemented by each environment"
 
+    def _collect_reward(self):
+        """
+        Compute the reward to be given upon success in a collection task
+        """
+
+        return len(self.collected)
+    
     def _reward(self):
         """
         Compute the reward to be given upon success
@@ -1161,6 +1168,7 @@ class MiniGridEnv(gym.Env):
                 obj_to_collect.cur_pos = np.array([-1, -1])
                 self.collected.append(obj_to_collect)
                 self.grid.set(*fwd_pos, None)
+                reward+=1
 
         # Drop an object
         elif action == self.actions.drop:

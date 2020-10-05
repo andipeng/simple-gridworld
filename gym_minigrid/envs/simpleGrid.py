@@ -21,7 +21,7 @@ class SimpleGrid(MiniGridEnv):
 
         super().__init__(
             grid_size=size,
-            max_steps=20*size*size,
+            max_steps=5000,
             # Set this to True for maximum speed
             see_through_walls=True
         )
@@ -33,8 +33,8 @@ class SimpleGrid(MiniGridEnv):
         # Generate the surrounding walls
         self.grid.wall_rect(0, 0, width, height)
         
-        # Generated keys
-        self.numObjs = self._rand_int(1, 5)
+        # Generated random keys, up to maximum number to fill grid
+        self.numObjs = self._rand_int(1, (width*height)/4)
         objs = []
         objPos = []
         
@@ -55,9 +55,8 @@ class SimpleGrid(MiniGridEnv):
     def step(self, action):
         obs, reward, done, info = MiniGridEnv.step(self, action)
 
-        reward = len(self.collected)
         # loops until done collecting all objects
-        if reward == self.numObjs:
+        if len(self.collected) == self.numObjs:
             done = True
 
         return obs, reward, done, info
