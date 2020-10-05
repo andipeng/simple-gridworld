@@ -21,7 +21,7 @@ class SimpleGrid(MiniGridEnv):
 
         super().__init__(
             grid_size=size,
-            max_steps=5000,
+            max_steps=500,
             # Set this to True for maximum speed
             see_through_walls=True
         )
