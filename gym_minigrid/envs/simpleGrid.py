@@ -11,7 +11,7 @@ class SimpleGrid(MiniGridEnv):
         size=8,
         agent_start_pos=(1,1),
         agent_start_dir=0,
-        # Number of keys generated in env
+        # Max reward generated in env
         numObjs = 0,
         
     ):
@@ -63,6 +63,9 @@ class SimpleGrid(MiniGridEnv):
     
     def _reward(self):
         return len(self.collected)
+    
+    def _max_reward(self):
+        return self.numObjs
         
 class SimpleGrid5x5(SimpleGrid):
     def __init__(self, **kwargs):
