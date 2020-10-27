@@ -839,7 +839,7 @@ class MiniGridEnv(gym.Env):
         Compute the reward to be given upon success in a collection task
         """
 
-        return len(self.collected)
+        return (float(len(self.collected)))
     
     def _reward(self):
         """
@@ -1124,7 +1124,7 @@ class MiniGridEnv(gym.Env):
     def step(self, action):
         self.step_count += 1
         
-        reward = 0
+        reward = 0.0
         done = False
 
         # Get the position in front of the agent
@@ -1168,7 +1168,7 @@ class MiniGridEnv(gym.Env):
                 obj_to_collect.cur_pos = np.array([-1, -1])
                 self.collected.append(obj_to_collect)
                 self.grid.set(*fwd_pos, None)
-                reward+=1
+                reward = reward + 1.0
 
         # Drop an object
         elif action == self.actions.drop:

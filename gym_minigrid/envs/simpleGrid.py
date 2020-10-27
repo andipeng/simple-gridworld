@@ -21,7 +21,7 @@ class SimpleGrid(MiniGridEnv):
 
         super().__init__(
             grid_size=size,
-            max_steps=500,
+            max_steps=50,
             # Set this to True for maximum speed
             see_through_walls=True
         )
@@ -47,7 +47,7 @@ class SimpleGrid(MiniGridEnv):
 
         # Randomize the agent start position and orientation
         self.place_agent()
-        self.reward_range = (0, len(objs))
+        self.reward_range = (0.0, float(len(objs)))
 
         #TODO CHANGE
         self.mission = 'you must fetch the green keys'
@@ -62,10 +62,10 @@ class SimpleGrid(MiniGridEnv):
         return obs, reward, done, info
     
     def _reward(self):
-        return len(self.collected)
+        return float(len(self.collected))
     
     def _max_reward(self):
-        return self.numObjs
+        return float(self.numObjs)
         
 class SimpleGrid5x5(SimpleGrid):
     def __init__(self, **kwargs):
