@@ -21,7 +21,7 @@ class SimpleGrid(MiniGridEnv):
 
         super().__init__(
             grid_size=size,
-            max_steps=50,
+            max_steps=25,
             # Set this to True for maximum speed
             see_through_walls=True
         )
@@ -34,13 +34,14 @@ class SimpleGrid(MiniGridEnv):
         self.grid.wall_rect(0, 0, width, height)
         
         # Generated random keys, up to maximum number to fill grid
-        self.numObjs = self._rand_int(1, (width*height)/4)
+        #self.numObjs = self._rand_int(1, (width*height)/4)
+        self.numObjs = 6
         objs = []
         objPos = []
         
         # Until we have generated all the keys and placed randomly
         while len(objs) < self.numObjs:
-            objColor = 'green'
+            objColor = 'blue'
             pos = self.place_obj(Key(objColor))
             objs.append(('key', objColor))
             objPos.append(pos)
@@ -48,6 +49,8 @@ class SimpleGrid(MiniGridEnv):
         # Randomize the agent start position and orientation
         self.place_agent()
         self.reward_range = (0.0, float(len(objs)))
+        pos = self.place_obj(Ball("green"))
+        os = self.place_obj(Ball("green"))
 
         #TODO CHANGE
         self.mission = 'you must fetch the green keys'

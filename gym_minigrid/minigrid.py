@@ -1168,7 +1168,7 @@ class MiniGridEnv(gym.Env):
                 obj_to_collect.cur_pos = np.array([-1, -1])
                 self.collected.append(obj_to_collect)
                 self.grid.set(*fwd_pos, None)
-                reward = reward + 1.0
+                reward = 1.0
 
         # Drop an object
         elif action == self.actions.drop:
